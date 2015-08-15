@@ -21,7 +21,6 @@ public class AppInfoParser {
 	 * @return AppInfo list
 	 */
 	public static List<AppInfo> getAppInfos(Context context) {
-		// 得到一个java保证的 包管理器。
 		PackageManager pm = context.getPackageManager();
 		List<PackageInfo> packInfos = pm.getInstalledPackages(0);
 		List<AppInfo> appinfos = new ArrayList<AppInfo>();
@@ -33,26 +32,20 @@ public class AppInfoParser {
 			appinfo.setIcon(icon);
 			String appname = packInfo.applicationInfo.loadLabel(pm).toString();
 			appinfo.setName(appname);
-			// 应用程序apk包的路径
 			String apkpath = packInfo.applicationInfo.sourceDir;
 			appinfo.setApkpath(apkpath);
 			File file = new File(apkpath);
 			long appSize = file.length();
 			appinfo.setAppSize(appSize);
-			// 应用程序安装的位置。
-			int flags = packInfo.applicationInfo.flags; // 二进制映射 大bit-map
+			int flags = packInfo.applicationInfo.flags; 
 			if ((ApplicationInfo.FLAG_EXTERNAL_STORAGE & flags) != 0) {
-				// 外部存储
 				appinfo.setInRom(false);
 			} else {
-				// 手机内存
 				appinfo.setInRom(true);
 			}
 			if ((ApplicationInfo.FLAG_SYSTEM & flags) != 0) {
-				// 系统应用
 				appinfo.setUserApp(false);
 			} else {
-				// 用户应用
 				appinfo.setUserApp(true);
 			}
 			appinfo.setUid(packInfo.applicationInfo.uid);
